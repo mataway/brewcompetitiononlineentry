@@ -20,30 +20,116 @@ These were verified against the live server and they change how things behave:
 
 ## Never overwrite
 
+Four paths must survive every deploy. `site/config.php` is the obvious one;
+the other three are less obvious and would cause real damage:
+
+| Path | Why |
+|---|---|
+| `site/config.php` | Live DB credentials. Placed on the server by hand, once. |
+| `user_images/` | Admin uploads land here — **including the contest logo**. |
+| `user_docs/` | Entrant-facing document uploads. |
+| `user_temp/` | Scratch space the app writes to. |
+
+The config exclusion is `site/config.php*`, with the trailing `*`. Without it,
+environment copies like `site/config.php.prod` are uploaded into the public
+docroot — and since `.prod` is not a PHP extension, nginx serves them as **plain
+text**. That is a full credential disclosure over HTTP, and a dry run is how you
+catch it.
+
+**`.gitignore` does not apply to lftp.** It mirrors the working tree, so anything
+ignored-but-present on disk (`.DS_Store`, `site/config.php.prod`) uploads unless
+it is in the script's own exclusion list. Check with:
+
+```bash
+git status --ignored --porcelain | grep -E '^(\?\?|!!)'
+```
+
+Every path that prints must either be excluded in `deploy.sh` or be something you
+genuinely want on the server.
+
+Git tracks only the placeholder files in those three directories
+(`sample_logo.png` and two `readme.txt`), so a mirror without these exclusions
+would delete every real upload.
+
 **`site/config.php`** holds the live database credentials. Upload it **once**, by
 hand, then exclude it from every subsequent sync. This is the single most
 important rule here — an accidental overwrite takes the site down, and an
 accidental *download-then-commit* leaks the password.
 
-Set the exclusion in your FTP client so you can't forget:
+`./deploy.sh` already excludes it (see below). If you deploy by hand instead,
+set the exclusion in your client so you can't forget:
 
-| Client | Where |
+**SFTP note:** SFTP is a protocol, not a tool — there is no "SFTP exclude
+syntax". Exclusion is a feature of whatever client does the mirroring, and every
+GUI client below filters identically whether it's connected over FTP or SFTP.
+
+| Client | Exclude syntax |
 |---|---|
 | FileZilla | Site Manager → the site → *Filters* → exclude `site/config.php` |
-| WinSCP | Options → Transfer → *File mask* → exclude `site/config.php` |
+| WinSCP | Options → Transfer → *File mask* → `| site/config.php` (leading pipe = exclude) |
 | Cyberduck | Preferences → Transfers → *Filter* |
-| `lftp` | `mirror -R --exclude 'site/config.php' . /public_html` |
-| `rsync` | `--exclude 'site/config.php'` |
+| Sublime Text SFTP | `"ignore_regexes": ["site/config\\.php$"]` in `sftp-config.json` |
+| `lftp` (`sftp://`) | `mirror -R --exclude-glob 'site/config.php' . /public_html` |
+| `rsync -e ssh` | `--exclude 'site/config.php'` |
+| `rclone` (sftp remote) | `--exclude 'site/config.php'` |
+| OpenSSH `sftp` / `scp` | **No exclude support at all.** `put -r` uploads everything, every time. Do not deploy with these. |
 
-Environment-specific copies (`site/config.php.prod` and friends) are gitignored —
-see the entry in `.gitignore`. Keep them locally or in a password manager, never
-in the repo.
+`lftp` gotcha: `--exclude` takes a **regular expression**, `--exclude-glob` takes
+a **glob**. `--exclude 'site/config.php'` works only by accident (the `.` matches
+any character). Use `--exclude-glob`, or anchor the regex as
+`--exclude 'site/config\.php$'`.
 
-### Optional exclusions
+### The deploy script
 
-Not required, just dead weight over FTP: `.git/`, `assets/` (print-resolution
-brand art, ~700 KB, not used at runtime), `composer.json` / `composer.lock`,
-`phpstan*`, `.github/`, `sql/`.
+`./deploy.sh` wraps all of this. It is a **dry run by default** — nothing reaches
+the server without `--live`:
+
+```bash
+./deploy.sh                    # show what would change
+./deploy.sh --live             # upload
+./deploy.sh --live --delete    # also remove remote files deleted locally
+```
+
+Connection settings live at the top of the script. The SSH key is found by
+pattern (`~/.ssh/*keys-californiacidercup.com.pem`) so the account-id filename
+isn't baked into the repo; override with `CCC_DEPLOY_KEY=/path/to/key.pem`.
+
+Before running it warns you if the working tree is dirty — **lftp mirrors the
+working tree, not `HEAD`**, so uncommitted edits are deployed too.
+
+**Two lftp details that cost real debugging time**, both verified against 4.9.3:
+
+- lftp appends its own `-s -l USER -p PORT HOST sftp` to `sftp:connect-program`,
+  so that setting should carry *only* the key. And the `sftp://user@host` URL
+  form **silently drops the username** — ssh then falls back to your local login
+  name. The user has to come from `-u 'name,'` (trailing comma = empty password).
+- Exclusion patterns must be quoted for **lftp's** parser, not escaped for the
+  shell. Passing them through `printf %q` turns `phpstan*` into `phpstan\*`,
+  which lftp reads as a literal asterisk — the wildcard exclusions then match
+  nothing and upload silently. The script single-quotes them instead.
+
+### Alternative: `git-ftp`
+
+`git-ftp` deploys **commits** rather than the working tree, and uploads only
+git-tracked files — so a gitignored `site/config.php` can never go up, no
+exclusion list required. The catch on macOS: it shells out to `curl`, and the
+system `/usr/bin/curl` has no SFTP support. You'd need Homebrew's curl (keg-only)
+ahead of it on `PATH`:
+
+```bash
+export PATH="/opt/homebrew/opt/curl/bin:$PATH"
+curl -V | grep -o sftp        # must print sftp
+
+git config git-ftp.url  "sftp://sftp.californiacidercup.com:9022/home/californiacidercup.com/www"
+git config git-ftp.user "californiacidercup.com"
+git config git-ftp.key  "$HOME/.ssh/…keys-californiacidercup.com.pem"
+
+git ftp init -D && git ftp init     # first deploy
+git ftp push -D && git ftp push     # subsequent
+```
+
+Use `.git-ftp-ignore` (glob patterns, one per line) to skip `assets/`, `sql/`
+and friends.
 
 ---
 
