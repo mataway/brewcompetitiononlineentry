@@ -124,13 +124,15 @@
             if ($logged_in) {
                 $salutation .= sprintf("<p class='landing-page-salutation animate__animated animate__fadeInDown animate__delay-3s'>%s %s!</p>",$default_page_text_006,$_SESSION['brewerFirstName']); 
             }
-            $salutation .= "<p class='lead landing-page-salutation fw-light animate__animated animate__fadeInUp animate__delay-5s'><small>";
-            $salutation .= sprintf("%s %s %s ",$default_page_text_022, $_SESSION['contestName'], $default_page_text_023);
-            if ($_SESSION['contestHostWebsite'] != "") $salutation .= sprintf("<a class='hide-loader' href='%s' target='_blank'>%s</a>",$_SESSION['contestHostWebsite'],$_SESSION['contestHost']);
-            else $salutation .= $_SESSION['contestHost'];
-            if (!empty($_SESSION['contestHostLocation'])) $salutation .= sprintf(", %s",$_SESSION['contestHostLocation']);
-            $salutation .= ".";
-            $salutation .= "</small></p>";
+            /**
+             * California Cider Cup: the "Thank you for your interest in the
+             * <contest> organized by <host>" line is removed at the client's
+             * request. The landing page at the site root now carries the
+             * introduction, so repeating it here is redundant.
+             *
+             * Upstream built it from $default_page_text_022 / _023 plus the
+             * contestHost* preferences - restore this block to bring it back.
+             */
 
         }
 
@@ -336,11 +338,13 @@
     </div>
     <?php } ?>
 
+    <?php if (trim($salutation) != "") { ?>
     <div id="salutation" class="text-light bg-black pt-4 pb-3 d-print-none">
         <section class="<?php echo $container_main; ?>">
             <?php echo $salutation; ?>
         </section>
     </div>
+    <?php } ?>
 
     <?php } ?>
 
