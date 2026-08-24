@@ -35,7 +35,10 @@ if ($section == "default") {
 
 else {
 	$link_bs_target_toggle = "";
-	$link_prefix = $base_url;
+	// The site root is the California Cider Cup landing page, so the #rules /
+	// #entry-info / #volunteers anchors have to be prefixed with the
+	// competition page rather than with $base_url.
+	$link_prefix = $base_url."index.php?section=default";
 }
 
 if ($logged_in) {
@@ -79,7 +82,8 @@ if ($logged_in) {
 
     	<div class="container-fluid">
 
-	        <a class="navbar-brand" href="<?php if ($section == "default") echo "#home"; else echo $link_prefix; ?>"><i class="fas fa-home me-2"></i></a>
+	        <!-- Home is the California Cider Cup landing page at the site root. -->
+	        <a class="navbar-brand" href="<?php echo $base_url; ?>"><i class="fas fa-home me-2"></i></a>
 
 	        <button type="button" class="navbar-toggler" aria-controls="#nav-toggler" aria-label="Toggle Navigation" data-bs-toggle="collapse" data-bs-target="#nav-toggler">
 	          <span class="navbar-toggler-icon"></span>

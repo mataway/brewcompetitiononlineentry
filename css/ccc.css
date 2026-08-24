@@ -1,0 +1,532 @@
+@charset "UTF-8";
+
+/**
+ * Module:      ccc.css
+ * Description: California Cider Cup brand layer.
+ *
+ *              Loaded on every public page *after* default-3.min.css, and by
+ *              index.landing.php on its own. Two jobs:
+ *
+ *              1. Brand tokens + the .ccc-* classes that build the landing page.
+ *              2. Overrides that skin the stock BCOE&M public pages so the jump
+ *                 from the landing page into the competition app is not jarring.
+ *
+ *              The public theme is hardcoded in site/bootstrap.php (prefsTheme
+ *              only applies to admin), so this override layer is the supported
+ *              way to brand the public side without diverging from upstream.
+ *              Nothing here touches the admin side.
+ */
+
+/* Poppins + Mulish are linked from index.landing.php - they are only used by
+   the landing page, so the app pages do not pay for the request. */
+
+:root {
+    /* Brand palette supplied by the cider company */
+    --ccc-brown: #593624;           /* "dark gray brown" - all body + heading text */
+    --ccc-orange-deep: #E68710;     /* brand orange - "Join Us" band, buttons */
+    --ccc-yellow: #E2B731;          /* brand yellow - logo trophy */
+    --ccc-green: #8BC33E;           /* brand green - logo leaf */
+
+    /* Design-derived, sampled from the approved Canva artboard. The hero band
+       is a lighter orange than the brand orange - deliberate in the design, not
+       one of the four brand colours. Set it to var(--ccc-orange-deep) to
+       normalise the two bands. */
+    --ccc-orange: #FF9322;          /* hero band */
+    --ccc-orange-dark: #C4700A;     /* hover/active */
+    --ccc-brown-deep: #3E2517;      /* nav, footer */
+    --ccc-cream: #F6F8EF;           /* tiles */
+    --ccc-tan: #E4D3AF;             /* tile icon circles */
+
+    /* Corner radii measured off the Canva artboard */
+    --ccc-radius-photo: 30px;
+    --ccc-radius-tile: 20px;
+
+    /* Brand faces are Futura Bold (headings) and Lota Grotesque (body). Both are
+       commercial and neither has a free webfont, so these are the closest
+       Google Fonts stand-ins: Jost is a Futura revival, Hanken Grotesk is a
+       geometric grotesque in Lota's register.
+       If a licensed webfont kit is available, @font-face it and put the real
+       family first in each stack - nothing else needs to change. */
+    --ccc-font-display: 'Jost', 'Futura', 'Century Gothic', sans-serif;
+    --ccc-font-body: 'Hanken Grotesk', 'Lota Grotesque', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+
+/* ==========================================================================
+   1. Landing page
+   ========================================================================== */
+
+body.ccc-landing {
+    margin: 0;
+    padding: 0;
+    font-family: var(--ccc-font-body);
+    font-size: 18px;
+    line-height: 1.55;
+    color: var(--ccc-brown);
+    background: #fff;
+    -webkit-font-smoothing: antialiased;
+}
+
+.ccc-landing *,
+.ccc-landing *::before,
+.ccc-landing *::after {
+    box-sizing: border-box;
+}
+
+/* Content width matches the Canva artboard: ~1270px of content at a 1440
+   viewport. */
+.ccc-wrap {
+    width: 100%;
+    max-width: 1340px;
+    margin: 0 auto;
+    padding: 0 35px;
+}
+
+/* --- Header ------------------------------------------------------------- */
+
+.ccc-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--ccc-brown-deep);
+}
+
+.ccc-header .ccc-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 58px;
+}
+
+.ccc-header-mark {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--ccc-font-display);
+    font-weight: 800;
+    font-size: 15px;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--ccc-cream);
+    text-decoration: none;
+}
+
+/* ccc-mark-light is the gold-on-transparent icon, made for dark grounds. */
+.ccc-header-mark img {
+    display: block;
+    width: 32px;
+    height: auto;
+}
+
+.ccc-nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 22px;
+}
+
+.ccc-nav a {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ccc-cream);
+    text-decoration: none;
+    padding: 6px 2px;
+    border-bottom: 2px solid transparent;
+}
+
+.ccc-nav a:hover,
+.ccc-nav a:focus-visible {
+    color: #fff;
+    border-bottom-color: var(--ccc-orange);
+}
+
+.ccc-nav a.ccc-nav-cta {
+    background: var(--ccc-orange);
+    color: var(--ccc-brown-deep);
+    border-radius: 999px;
+    padding: 7px 18px;
+    border-bottom: 0;
+}
+
+.ccc-nav a.ccc-nav-cta:hover,
+.ccc-nav a.ccc-nav-cta:focus-visible {
+    background: #fff;
+    color: var(--ccc-brown-deep);
+}
+
+/* --- Hero --------------------------------------------------------------- */
+
+.ccc-hero {
+    background: var(--ccc-orange);
+    padding: 56px 0 0;
+    text-align: center;
+}
+
+.ccc-hero-logo {
+    display: block;
+    width: 100%;
+    max-width: 935px;
+    height: auto;
+    margin: 0 auto 44px;
+}
+
+.ccc-hero-photo {
+    display: block;
+    width: 100%;
+    height: clamp(200px, 26vw, 360px);
+    object-fit: cover;
+    object-position: center;
+    border-radius: var(--ccc-radius-photo);
+}
+
+.ccc-hero-photo-frame {
+    padding-bottom: 44px;
+}
+
+/* --- Section furniture -------------------------------------------------- */
+
+.ccc-section {
+    padding: 96px 0;
+}
+
+.ccc-section--about {
+    background: #fff;
+}
+
+.ccc-section--join {
+    background: var(--ccc-orange-deep);
+}
+
+.ccc-h2 {
+    font-family: var(--ccc-font-display);
+    font-weight: 800;
+    font-size: clamp(44px, 5.2vw, 75px);
+    line-height: 1;
+    letter-spacing: -.02em;
+    text-transform: uppercase;
+    color: var(--ccc-brown);
+    margin: 0;
+}
+
+/* The dotted rule under each section heading in the Canva design. */
+.ccc-rule {
+    height: 3px;
+    margin: 18px 0 26px;
+    /* Multiple of the 9px dot pitch so the run never ends on a clipped dot. */
+    max-width: 486px;
+    background-image: radial-gradient(circle, currentColor 1.5px, transparent 1.6px);
+    background-size: 9px 3px;
+    background-repeat: repeat-x;
+    color: var(--ccc-orange);
+}
+
+.ccc-section--join .ccc-rule {
+    color: var(--ccc-cream);
+}
+
+.ccc-section p {
+    font-size: clamp(17px, 1.7vw, 24px);
+    margin: 0 0 1.4em;
+    color: var(--ccc-brown);
+}
+
+.ccc-section p:last-child {
+    margin-bottom: 0;
+}
+
+/* --- About -------------------------------------------------------------- */
+
+.ccc-about-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 64px;
+    align-items: center;
+}
+
+.ccc-about-photo {
+    display: block;
+    width: 100%;
+    aspect-ratio: 6 / 5;
+    object-fit: cover;
+    object-position: center;
+    border-radius: var(--ccc-radius-photo);
+}
+
+/* --- Join us ------------------------------------------------------------ */
+
+.ccc-tiles {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 28px;
+    margin-top: 56px;
+}
+
+.ccc-tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    width: 246px;
+    padding: 26px 20px 30px;
+    background: var(--ccc-cream);
+    border-radius: var(--ccc-radius-tile);
+    text-decoration: none;
+    color: var(--ccc-brown);
+}
+
+.ccc-tile:hover,
+.ccc-tile:focus-visible {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 22px rgba(62, 37, 23, .22);
+}
+
+/* Sized to the artboard by cap-height (22px), not by nominal font-size -
+   Poppins runs wider per cap-height than Canva's display face, so the tracking
+   is pulled in to keep the label width close. */
+.ccc-tile-label {
+    font-family: var(--ccc-font-display);
+    font-weight: 800;
+    font-size: 30px;
+    letter-spacing: -.02em;
+    text-transform: uppercase;
+}
+
+.ccc-tile-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 118px;
+    height: 118px;
+    border-radius: 50%;
+    background: var(--ccc-tan);
+    border: 3px solid var(--ccc-brown);
+    overflow: hidden;
+}
+
+.ccc-tile-icon img,
+.ccc-tile-icon svg {
+    width: 66%;
+    height: 66%;
+    object-fit: contain;
+}
+
+/* The Instagram tile ring in the design is the app's gradient. */
+.ccc-tile-icon--social {
+    border: 0;
+    padding: 5px;
+    background: conic-gradient(from 210deg, #FEDA75, #FA7E1E, #D62976, #962FBF, #4F5BD5, #FEDA75);
+}
+
+.ccc-tile-icon--social span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: var(--ccc-tan);
+    overflow: hidden;
+}
+
+.ccc-tile-icon--social img {
+    width: 82%;
+    height: 82%;
+}
+
+/* --- Footer ------------------------------------------------------------- */
+
+.ccc-footer {
+    background: #fff;
+    padding: 34px 0 40px;
+}
+
+.ccc-footer .ccc-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.ccc-footer-note {
+    font-size: 14px;
+    color: var(--ccc-brown);
+    opacity: .72;
+    margin: 0;
+}
+
+.ccc-footer-note a {
+    color: inherit;
+}
+
+.ccc-footer-mark {
+    font-weight: 300;
+    font-size: clamp(20px, 2.2vw, 29px);
+    color: var(--ccc-brown);
+    margin: 0;
+}
+
+/* --- Landing responsive ------------------------------------------------- */
+
+@media screen and (max-width: 900px) {
+    .ccc-about-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 34px;
+    }
+
+    /* Photo above the copy on narrow screens. */
+    .ccc-about-media {
+        order: -1;
+    }
+
+    .ccc-section {
+        padding: 64px 0;
+    }
+
+    .ccc-hero {
+        padding-top: 40px;
+    }
+}
+
+@media screen and (max-width: 640px) {
+    .ccc-wrap {
+        padding: 0 20px;
+    }
+
+    .ccc-header .ccc-wrap {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    .ccc-header {
+        position: static;
+    }
+
+    .ccc-nav {
+        gap: 2px 16px;
+    }
+
+    .ccc-tile {
+        width: 100%;
+        max-width: 320px;
+    }
+}
+
+
+/* ==========================================================================
+   2. BCOE&M public page overrides
+   --------------------------------------------------------------------------
+   Everything below only skins the stock public pages. The admin side loads a
+   different stylesheet set and is untouched.
+   ========================================================================== */
+
+/* Brand typography. default-3.css routes everything through these two custom
+   properties, so reassigning them re-faces the public pages wholesale. */
+body {
+    --font-family-sans-serif: var(--ccc-font-body);
+}
+
+#main-content h1,
+#main-content h2,
+.landing-page-section-header h1,
+.site-header h1,
+#site-nav .navbar-brand {
+    font-family: var(--ccc-font-display);
+    font-weight: 800;
+    letter-spacing: -.01em;
+}
+
+.site-nav,
+#site-nav.bg-dark,
+.site-footer {
+    background: var(--ccc-brown-deep) !important;
+}
+
+#site-nav .nav-link,
+#site-nav .navbar-brand {
+    color: var(--ccc-cream);
+}
+
+#site-nav .nav-link:hover,
+#site-nav .nav-link:focus,
+#site-nav .navbar-brand:hover {
+    color: var(--ccc-orange);
+}
+
+#salutation.bg-black {
+    background: var(--ccc-brown-deep) !important;
+}
+
+/* The host-website link in the salutation band is default blue on dark brown. */
+#salutation a {
+    color: var(--ccc-orange);
+}
+
+#salutation a:hover,
+#salutation a:focus {
+    color: #fff;
+}
+
+.landing-page-section-header {
+    border-bottom-color: var(--ccc-orange) !important;
+}
+
+.landing-page-section-header h1,
+.landing-page-section h1,
+.landing-page-section h2 {
+    color: var(--ccc-brown);
+}
+
+/* .text-purple / #scroll-indicator are hardcoded #311B92 in common-3.css. */
+.text-purple,
+a.text-purple {
+    color: var(--ccc-brown) !important;
+}
+
+a.text-purple:hover,
+a.text-purple:focus {
+    color: var(--ccc-orange-dark) !important;
+}
+
+/* Beats the .text-purple !important rule above, which these icons also carry. */
+#scroll-indicator .text-purple,
+#scroll-indicator .fa,
+#scroll-indicator .fas,
+#sticky-home .fa,
+#sticky-home .fas {
+    color: var(--ccc-orange-deep) !important;
+}
+
+.site-footer a {
+    color: var(--ccc-orange);
+}
+
+.site-footer a:hover,
+.site-footer a:focus {
+    color: #fff;
+}
+
+.btn-primary {
+    --bs-btn-bg: var(--ccc-orange-deep);
+    --bs-btn-border-color: var(--ccc-orange-deep);
+    --bs-btn-color: #fff;
+    --bs-btn-hover-bg: var(--ccc-orange-dark);
+    --bs-btn-hover-border-color: var(--ccc-orange-dark);
+    --bs-btn-active-bg: var(--ccc-orange-dark);
+    --bs-btn-active-border-color: var(--ccc-orange-dark);
+    --bs-btn-disabled-bg: var(--ccc-orange-deep);
+    --bs-btn-disabled-border-color: var(--ccc-orange-deep);
+}
+
+#main-content a:not(.btn):not(.nav-link) {
+    color: var(--ccc-orange-dark);
+}
+
+#main-content a:not(.btn):not(.nav-link):hover {
+    color: var(--ccc-brown);
+}

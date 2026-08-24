@@ -19,6 +19,19 @@ header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
 header('Cache-Control: post-check=0, pre-check=0', false);
 header('Pragma: no-cache');
 
+/**
+ * California Cider Cup: the site root serves the brand landing page.
+ *
+ * A request carrying an explicit ?section= (normal app navigation) or ?msg=
+ * (the redirect targets used throughout includes/process/*, which post back to
+ * the bare root with a status code) falls through to the application below.
+ */
+if ((!isset($_GET['section'])) && (!isset($_GET['msg']))) {
+    require ('index.landing.php');
+    mysqli_close($connection);
+    exit();
+}
+
 // Good for 3.0.0+
 $account_pages = array("list","pay","brewer","user","brew","pay","evaluation");
 
@@ -164,6 +177,14 @@ else include (INCLUDES.'load_cdn_libraries_public.inc.php');
     <!-- Load BCOE&M Custom CSS - Contains Bootstrap overrides and custom classes common to all BCOE&M themes -->
     <link rel="stylesheet" type="text/css" href="<?php echo $css_common_url; ?>" />
     <link rel="stylesheet" type="text/css" href="<?php echo $theme; ?>" />
+
+    <!-- California Cider Cup brand layer - overrides the hardcoded public theme -->
+<?php if (($section != "admin") && (file_exists(ROOT.'css/ccc.css'))) { ?>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@500;700;800&amp;family=Hanken+Grotesk:wght@300;400;600;700&amp;display=swap" />
+    <link rel="stylesheet" type="text/css" href="<?php echo $css_url; ?>ccc.css" />
+<?php } ?>
 
     <script type="text/javascript">
         var username_url = "<?php echo $ajax_url; ?>username.ajax.php";

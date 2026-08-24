@@ -28,7 +28,11 @@ templates/simple-us-entry-barcode.html
 templates/simple-us-entry.html
 brewingcompetitions.com
 site/config.php
+# Environment-specific copies of the config (config.php.prod etc.) - these hold
+# live DB credentials and must never be committed. See DEPLOY.md.
+site/config.php.*
 lint-all.ps1
 cleanup_double_encoding.php
 *.code-workspace
 vendor/
+.DS_Store
