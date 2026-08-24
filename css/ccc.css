@@ -244,10 +244,14 @@ body.ccc-landing {
     align-items: center;
 }
 
+/* ccc-poppies.jpg is pre-cropped to the framing used on the Canva artboard
+   (source rect x600..1570, y167..986 of the 1600x1067 original) - Canva zooms
+   into the blooms rather than fitting the whole frame, which object-fit alone
+   can't express. The ratio here matches the file, so cover crops nothing. */
 .ccc-about-photo {
     display: block;
     width: 100%;
-    aspect-ratio: 6 / 5;
+    aspect-ratio: 970 / 819;
     object-fit: cover;
     object-position: center;
     border-radius: var(--ccc-radius-photo);
