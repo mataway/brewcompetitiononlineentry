@@ -19,6 +19,8 @@ header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
 header('Cache-Control: post-check=0, pre-check=0', false);
 header('Pragma: no-cache');
 
+require_once (LIB.'ccc.lib.php');
+
 /**
  * California Cider Cup: the site root serves the brand landing page.
  *
@@ -183,7 +185,7 @@ else include (INCLUDES.'load_cdn_libraries_public.inc.php');
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@500;700;800&amp;family=Hanken+Grotesk:wght@300;400;600;700&amp;display=swap" />
-    <link rel="stylesheet" type="text/css" href="<?php echo $css_url; ?>ccc.css" />
+    <link rel="stylesheet" type="text/css" href="<?php echo ccc_asset('css/ccc.css', $base_url); ?>" />
 <?php } ?>
 
     <script type="text/javascript">

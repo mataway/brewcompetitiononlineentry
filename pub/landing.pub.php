@@ -32,7 +32,7 @@ $ccc_contact_email = "info@californiacidercup.com";
             </div>
 
             <div class="ccc-about-media">
-                <img class="ccc-about-photo" src="<?php echo $ccc_images_url; ?>ccc-poppies.jpg" alt="California poppies against a blue sky" loading="lazy" />
+                <img class="ccc-about-photo" src="<?php echo ccc_asset('images/ccc/ccc-poppies.jpg', $base_url); ?>" alt="California poppies against a blue sky" loading="lazy" />
             </div>
 
         </div>
@@ -54,7 +54,7 @@ $ccc_contact_email = "info@californiacidercup.com";
             <a class="ccc-tile" href="<?php echo $ccc_instagram_url; ?>" target="_blank" rel="noopener" aria-label="Follow the California Cider Cup on Instagram">
                 <span class="ccc-tile-label">Follow Us</span>
                 <span class="ccc-tile-icon ccc-tile-icon--social">
-                    <span><img src="<?php echo $ccc_images_url; ?>ccc-mark.png" alt="" /></span>
+                    <span><img src="<?php echo ccc_asset('images/ccc/ccc-mark.png', $base_url); ?>" alt="" /></span>
                 </span>
             </a>
 

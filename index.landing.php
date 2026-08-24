@@ -48,20 +48,20 @@ $ccc_description = "The California Cider Cup celebrates and recognizes great Cal
     <title><?php echo $ccc_contest_name; ?></title>
     <meta name="description" content="<?php echo htmlspecialchars($ccc_description, ENT_QUOTES, 'UTF-8'); ?>" />
 
-    <link rel="icon" type="image/png" sizes="32x32" href="<?php echo $ccc_images_url; ?>ccc-icon-32.png" />
-    <link rel="icon" type="image/png" sizes="512x512" href="<?php echo $ccc_images_url; ?>ccc-icon-512.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="<?php echo $ccc_images_url; ?>ccc-icon-180.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="<?php echo ccc_asset('images/ccc/ccc-icon-32.png', $base_url); ?>" />
+    <link rel="icon" type="image/png" sizes="512x512" href="<?php echo ccc_asset('images/ccc/ccc-icon-512.png', $base_url); ?>" />
+    <link rel="apple-touch-icon" sizes="180x180" href="<?php echo ccc_asset('images/ccc/ccc-icon-180.png', $base_url); ?>" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@500;700;800&amp;family=Hanken+Grotesk:wght@300;400;600;700&amp;display=swap" />
-    <link rel="stylesheet" type="text/css" href="<?php echo $css_url; ?>ccc.css" />
+    <link rel="stylesheet" type="text/css" href="<?php echo ccc_asset('css/ccc.css', $base_url); ?>" />
 
     <!-- Open Graph -->
     <meta property="og:title" content="<?php echo $ccc_contest_name; ?>" />
     <meta property="og:description" content="<?php echo htmlspecialchars($ccc_description, ENT_QUOTES, 'UTF-8'); ?>" />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="<?php echo $ccc_images_url; ?>ccc-share.jpg" />
+    <meta property="og:image" content="<?php echo ccc_asset('images/ccc/ccc-share.jpg', $base_url); ?>" />
     <meta property="og:url" content="<?php echo htmlspecialchars($base_url, ENT_QUOTES, 'UTF-8'); ?>" />
     <meta name="twitter:card" content="summary_large_image" />
 
@@ -73,7 +73,7 @@ $ccc_description = "The California Cider Cup celebrates and recognizes great Cal
     <div class="ccc-wrap">
 
         <a class="ccc-header-mark" href="#top">
-            <img src="<?php echo $ccc_images_url; ?>ccc-mark-light.png" alt="" />
+            <img src="<?php echo ccc_asset('images/ccc/ccc-mark-light.png', $base_url); ?>" alt="" />
             <span><?php echo $ccc_contest_name; ?></span>
         </a>
 
@@ -92,11 +92,11 @@ $ccc_description = "The California Cider Cup celebrates and recognizes great Cal
 <section id="top" class="ccc-hero">
 
     <div class="ccc-wrap">
-        <img class="ccc-hero-logo" src="<?php echo $ccc_images_url; ?>ccc-logo.png" alt="<?php echo $ccc_contest_name; ?>" />
+        <img class="ccc-hero-logo" src="<?php echo ccc_asset('images/ccc/ccc-logo.png', $base_url); ?>" alt="<?php echo $ccc_contest_name; ?>" />
     </div>
 
     <div class="ccc-wrap ccc-hero-photo-frame">
-        <img class="ccc-hero-photo" src="<?php echo $ccc_images_url; ?>ccc-apples.jpg" alt="A crate of freshly picked cider apples" />
+        <img class="ccc-hero-photo" src="<?php echo ccc_asset('images/ccc/ccc-apples.jpg', $base_url); ?>" alt="A crate of freshly picked cider apples" />
     </div>
 
 </section>
